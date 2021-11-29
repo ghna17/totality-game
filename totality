@@ -1,0 +1,159 @@
+# import mods
+from random import *
+
+
+# define functions
+def pName(order):
+    """asks for players' names"""
+    # ask for player's name
+    name = input("Hi Player" + str(order) +
+                 " what would you like to be called? >> ")
+    pName.n = name
+    return name
+
+
+def pTurn(name):
+    """makes three random dice rolls"""
+    # generate & display 3 random dice rolls
+    pa = randint(1, 6)
+    pb = randint(1, 6)
+    pc = randint(1, 6)
+    pdice = [pa, pb, pc]
+    print("\nOkay, your dice rolls are: ", pdice)
+    # create and assign a value for a function object
+    pTurn.ob = pdice
+    return pdice
+
+
+def pCal(ls):
+    """calculates the total of dice rolls value"""
+    # retrieve values of variables
+    pa = pTurn.ob[0]
+    pb = pTurn.ob[1]
+    pc = pTurn.ob[2]
+    # create conditions to calculate
+    if pa == pb and pb == pc:
+        prd = pa * pb * pc
+    elif pa == pb:
+        prd = pa * pb + pc
+    elif pa == pc:
+        prd = pa * pc + pb
+    elif pb == pc:
+        prd = pa + pb * pc
+    else:
+        prd = pa + pb + pc
+    print("Your score is: ", prd)
+    #create and assign a value for a function object
+    pCal.prd = prd
+    return prd
+
+
+def pReroll():
+    """re-rolls and re-calculates"""
+    print("Which dice would you like to re-roll?")
+    pre = int(
+        input(
+            "Type 1 for the first dice, 2 for the second, or 3 for the third. >> "
+        ))
+    # change a dice value from a list
+    pTurn.ob[pre - 1] = randint(1, 6)
+    print("\nYour new dice rolls are: ", pTurn.ob)
+    # calculate with new dice roll
+    pCal(pTurn.ob)
+    return pTurn.ob
+
+
+def score_print():
+    """prints players' scores"""
+    print("\nHere are your current scores!")
+    print("Player 1's score:", p1sr)
+    print("Player 2's score:", p2sr)
+
+
+anm = """GAME ANNOUNCEMENT: Now we're going to play TOTALITY!!!
+Players will choose a number of rounds to play.
+
+In each round:
+- Player 1 will roll 3 dice. They are trying to get the highest total possible on the three dice, but dice with same value MUST be multiplied together.
+- After rolling 3 dice, Player 1 has the option to end their turn or re-roll 1 of the dice in an attempt to get a higher score. 
+- Player 2 then gets a turn to do the same thing. 
+- After player 2 has finished, the final scores are compared to determine the winner.
+- The player with higher score receives 1 point for the round.
+
+Points are totaled after the final round and the winner will be declared.
+
+LET THE GAME BEGIN!"""
+
+print(anm)
+
+# start score at 0 - 0
+p1sr = 0
+p2sr = 0
+
+# get number of rounds from user
+num_round = int(input("\nFirst, let's decide a number of rounds! >> "))
+
+# enter name
+pName1 = pName(1)
+pName2 = pName(2)
+
+# start loop for each round
+for i in range(num_round):
+    print("\n < < < ROUND", i + 1, "> > >")
+    # for player1
+    print("\n>>> ", pName1 + "'s turn")
+    pTurn(pName1)
+    pCal(pTurn.ob)
+    # assign a current total score to p1
+    p1 = pCal.prd
+    # ask for re-roll or end turn
+    choice = input("\nDo you want to end your turn or re-roll 1 dice? >> ")
+    # re-calculate p1 total if re-roll
+    if choice == "re-roll":
+        pReroll()
+        # assign a current total score to p1
+        p1 = pCal.prd
+    else:
+        print("Player 1 ends their turn.")
+
+    # for player2
+    print("\n>>> ", pName2 + "'s turn")
+    pTurn(pName2)
+    pCal(pTurn.ob)
+    # assign a current total score to p2
+    p2 = pCal.prd
+    # ask for re-roll or end turn
+    choice = input("\nDo you want to end your turn or re-roll 1 dice? >> ")
+    # re-calculate p2 total if re-roll
+    if choice == "re-roll":
+        pReroll()
+        # assign a current total score to p2
+        p2 = pCal.prd
+    else:
+        print("Player 2 ends their turn.")
+
+    # determine round winner and award point
+    # award point
+    if p1 > p2:
+        p1sr += 1
+        print("\nResult: Player 1 won that round and gets 1 point.")
+        score_print()
+    elif p2 > p1:
+        p2sr += +1
+        print("\nResult: Player 2 won that round and gets 1 point.")
+        score_print()
+    elif p2 == p1:
+        print("\nResult: No one wins this round!")
+        score_print()
+
+# compare total points after final round
+# declare winner
+print("\n < < < WINNER AFTER", num_round, "ROUNDS > > >")
+if p1sr > p2sr:
+    print("OMG Incredible! Player 1 is the winner.")
+elif p2sr > p1sr:
+    print("Congratulations! Player 2 is the winner.")
+else:
+    print("Ohhhhh it's a tie!!!")
+
+print("Please re-run the program if you'd like to play again.")
